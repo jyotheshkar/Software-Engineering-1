@@ -8,6 +8,7 @@
 #     # Calculate the screen width and height
 #     screen_width = root.winfo_screenwidth()
 #     screen_height = root.winfo_screenheight()
+def search_title
 
 #     # Set the GUI window size and position it at the center of the screen
 #     window_width = 800
