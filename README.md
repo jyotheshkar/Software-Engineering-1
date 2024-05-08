@@ -41,7 +41,7 @@ To start the Novah application:
     ```bash
     python main.py
     ```
-3. Follow the voice prompts to start navigating the desktop, sending emails, managing folders, and more.
+3. Follow the voice prompts to start navigating the desktop, making notes, managing folders, and more.
 
 ## Contributing
 
