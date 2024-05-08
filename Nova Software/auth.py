@@ -1,45 +1,26 @@
-
+# open.py
 import random
 import speech_recognition as sr
+import pyautogui
 import time
 import spacy
 import pyttsx3
-import gui  # Importing the GUI module
+import ctypes
+import pygetwindow as gw
 
-# Initialize pyttsx3 engine with slower speed
-engine = pyttsx3.init()
-engine.setProperty('rate', 193)  # Adjust the value as needed, default is 200
-
-# Initialize Spacy NLP model
+# Load the English NLP model
 nlp = spacy.load("en_core_web_sm")
 
-# Activation phrases
-activation_phrases = ["hey", "hello", "hey nova", "hello nova", "hey buddy", "buddy", "hi nova"]
+# Initialize the Text-to-Speech engine
+engine = pyttsx3.init()
 
-# Function to respond based on the current time
-def get_greeting():
-    current_time = time.localtime()
-    if current_time.tm_hour < 12:
-        return "Good morning"
-    elif 12 <= current_time.tm_hour < 18:
-        return "Good afternoon"
-    else:
-        return "Good evening"
+# Possible phrases for starting the process
+start_phrases = ["Processing...", "On it...", "Just a second...", "Opening it up..."]
 
-# Function to process user's command
-def process_command(command):
-    if any(phrase in command.lower() for phrase in activation_phrases):
-        greeting = get_greeting()
-        return f"{random.choice(['Hello!', 'Hey!', 'Hey there!', 'Greetings!'])} {greeting}. Stand by for Biometric scan."
-    elif "are you awake" in command.lower():
-        greeting = get_greeting()
-        return f"Yes, I am awake. {greeting}. Stand by for Biometric scan."
-    elif "camera opened" in command.lower():
-        return "Biometrics Authentication successful. Activating desktop autopilot environment."
-    else:
-        return "I'm sorry, I didn't understand that."
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
 
-# Function to listen to user's voice command
 def listen():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
@@ -50,25 +31,93 @@ def listen():
     try:
         print("Recognizing...")
         command = recognizer.recognize_google(audio)
-        return command
+        print("You said:", command)
+        return command.lower()
     except sr.UnknownValueError:
-        print("Could not understand audio")
+        print("Sorry, I didn't understand that.")
         return ""
     except sr.RequestError as e:
         print("Could not request results; {0}".format(e))
         return ""
 
-# Function to speak the response
-def speak(response):
-    print(response)
-    engine.say(response)
-    engine.runAndWait()
+def open_application(app_name):
+    speak(random.choice(start_phrases))
+    if app_name is None:
+        speak("Application name not recognized.")
+        return
+    # Simulate pressing the Windows key to open the Start menu
+    pyautogui.press('win')
+    time.sleep(1)  # Wait for the Start menu to open
+    # Search for the application
+    pyautogui.write(app_name)
+    time.sleep(1)  # Wait for search results to appear
+    # Press Enter to open the first search result
+    pyautogui.press('enter')
+    time.sleep(2)  # Wait for the application to open
+    
+    # Get the handle of the active window
+    hwnd = ctypes.windll.user32.GetForegroundWindow()
+    # Set the window to fullscreen mode
+    ctypes.windll.user32.ShowWindow(hwnd, 3)  # 3 represents SW_MAXIMIZE
+    
+    speak(f"{app_name} opened in fullscreen mode.")
 
-# Main loop
-while True:
-    command = listen()
-    if command:
-        response = process_command(command)
-        speak(response)
-        if "camera opened" in command.lower():
-            gui.open_gui()  # Call the open_gui function from the gui module
+def process_command(command):
+    doc = nlp(command)
+    # Extract verb and object from the command
+    verb = None
+    obj = None
+    for token in doc:
+        if token.pos_ == "VERB" or token.pos_ == "AUX":
+            verb = token.lemma_  # Use lemma for verbs (e.g., "watch" instead of "watching")
+        if token.pos_ == "NOUN":
+            if obj is None:
+                obj = token.text
+            else:
+                obj += " " + token.text  # Handle multi-word object
+    return verb, obj
+
+
+def close_application(app_name):
+    if app_name is None:
+        speak("Application name not recognized.")
+        return
+
+    # Use pyautogui to locate the window title
+    window = pyautogui.getWindowsWithTitle(app_name)
+
+    if window:
+        # Close the window
+        window[0].close()
+        print(f"The {app_name} application has been closed.")
+        speak(f"The {app_name} application has been closed.")
+    else:
+        # If the window with the specified title is not found
+        print(f"No {app_name} application found.")
+        speak(f"No {app_name} application found.")
+
+    return  # Return after closing the application
+
+
+
+
+def scroll_up():
+    pyautogui.scroll(900)  # Scroll up by 900 pixels
+    speak("Scrolled up.")
+
+def scroll_down():
+    pyautogui.scroll(-900)  # Scroll down by 900 pixels
+    speak("Scrolled down.")
+
+if __name__ == "__main__":
+    while True:
+        command = listen()
+        verb, obj = process_command(command)
+        if verb == "open":
+            open_application(obj)
+        elif verb == "exit" or verb == "close":
+            close_application(obj)
+        elif "scroll up" in command or "scroll it up" in command:
+            scroll_up()
+        elif "scroll down" in command or "scroll it down" in command:
+            scroll_down()
