@@ -1,62 +1,127 @@
-# Novah: Voice-Based Desktop Automation
+Development of Novah
 
-Novah is a software application designed to empower individuals with disabilities to access computers seamlessly using voice commands and natural language processing. The tool aims to eliminate barriers for those with mobility impairments, enabling them to open applications, access files, retrieve weather and time information, and much more—all hands-free.
+Background
 
-## Features
+Novah is a software designed to empower individuals with disabilities by providing seamless computer access using voice commands and natural language processing. The tool aims to break down barriers for those with mobility impairments, allowing them to open applications, access files, access weather and time information, and much more—all hands-free.
 
-- **Voice Navigation and Desktop Automation**: Open any desktop application and navigate via voice commands.
-- **Natural Language Processing**: Communicate naturally with Novah using NLP.
-- **Multifactor Authentication**: Secure your access with face and hand recognition.
-- **Weather and Time Integration**: Voice-activated weather and time updates.
-- **YouTube Integration**: Search and watch YouTube videos via voice commands.
-- **Jokes and Notes**: Enjoy jokes and manage notes.
+The team of five lacked prior Agile experience and followed a Kanban methodology over five weeks. This approach ensured a continuous flow of tasks, reducing idle time and focusing on moving work from "To Do" to "Done" as quickly as possible.
 
-## Kanban Development Process
+Requirements:
 
-### Columns
+Using the MoSCoW prioritisation:
 
-- **Backlog**: Tasks not yet started.
-- **In Progress**: Tasks currently being developed.
-- **Review**: Tasks pending review.
-- **Done**: Completed tasks.
+- Must-Have:
 
-### Key Tasks
+- Voice navigation and desktop automation
 
-- **To Do**: Voice navigation, NLP refinement, multifactor authentication, weather/time APIs, website development.
-- **In Progress**: Gemini 1.5 Pro chatbot integration, face authentication.
-- **Done**: Authentication module, voice automation, enhanced NLP, jokes and notes, YouTube integration, web scraping.
+- Natural language processing for communication
 
-## Milestones
+- Should-Have:
 
-1. **Voice Navigation and Desktop Automation**: Navigate applications with ease using voice.
-2. **Natural Language Processing**: Engage naturally with Novah's chatbot.
-3. **Multifactor Authentication**: Secure your access with both hand and face recognition.
-4. **Weather and Time Integration**: Get voice-activated updates.
-5. **YouTube Integration**: Search YouTube via voice commands.
-6. **Web Scraping**: Easily access data and improve searches.
+- Weather and time API integration
 
-## Implementation
+- Multifactor authentication (face recognition)
 
-- **Backlog Refinement**: Key requirements were prioritized and placed in the backlog.
-- **Daily Stand-ups**: To align the team and adjust priorities daily.
-- **Task Assignment**: Members picked tasks according to their expertise.
-- **Continuous Development**: Tasks moved through In Progress, Review, and finally Done.
+- Could-Have:
 
-## Gathering Results
+- YouTube Integration
 
-- **Requirements Fulfillment**: All Must-Have and Should-Have features completed successfully.
-- **Team Collaboration**: Improved transparency and collaboration with Kanban.
-- **Future Plans**: Additional features are planned thanks to the clear task workflow.
+- Fun elements (e.g., jokes)
 
-## Contributing
+- Won't-Have:
 
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/your-feature`.
-3. Commit your changes: `git commit -m "Add new feature"`.
-4. Push to the branch: `git push origin feature/your-feature`.
-5. Create a Pull Request.
+- Advanced data analysis
 
-## License
+Method
 
-This project is licensed under the MIT License.
+In the Kanban process, tasks were organized into these columns:
 
+-Backlog: Tasks not yet started
+
+-In Progress: Tasks actively being worked on
+
+-Review: Tasks ready for review and quality checks
+
+-Done: Completed tasks
+
+Each team member picked up tasks from the backlog based on their availability and skillset. Daily stand-ups kept everyone aligned on progress and priority.
+
+The following tasks were managed through Kanban columns over five weeks:
+
+To Do
+
+- Voice navigation and desktop automation
+
+- NLP for natural communication
+
+- Multifactor authentication (face)
+
+- Weather and time APIs
+
+- Website development
+
+In Progress
+
+- NLP refinement
+
+- Gemini 1.5 Pro chatbot integration
+
+- Face authentication development
+
+Done
+
+- Authentication module (hand and face)
+
+- Desktop application access via Python
+
+- Enhanced NLP
+
+- Weather and time API integration
+
+- Jokes and notes modules
+
+- YouTube Integration
+
+- Web scraping for data accessibility
+
+Implementation
+
+The implementation involved moving tasks systematically through the Kanban columns:
+
+1. Backlog Refinement: Key requirements were broken into smaller tasks, placed in the backlog, and prioritised.
+
+2. Daily Stand-ups: Held to keep the team aligned and to adjust task priorities.
+
+3. Task Assignment: Team members chose tasks from the backlog based on their availability and expertise.
+
+4. Continuous Development: Tasks moved through "In Progress" to "Review" and finally "Done," ensuring continuous delivery.
+
+Milestones
+
+The following milestones were reached as tasks moved to "Done":
+
+- Voice Navigation and Desktop Automation: Users could open and navigate applications via voice commands.
+
+- Natural Language Processing: Provided seamless communication using natural language commands.
+
+- Multifactor Authentication: Integrated both hand and face recognition for secure access.
+
+- Weather and Time API Integration: Enabled voice-activated weather and time data retrieval.
+
+- Jokes and Notes: Implemented fun features and note management.
+
+- YouTube Integration: Allowed voice navigation for YouTube searches.
+
+- Web Scraping: Enhanced data accessibility and search functionality.
+
+These milestones reflect how Kanban enabled iterative feature delivery while ensuring a continuous flow.
+
+Gathering Results
+
+A post-development review helped determine whether Novah met the project's requirements:
+
+1. Requirements Fulfilment: All "Must-Have" and "Should-Have" features were completed successfully.
+
+2. Team Collaboration: The Kanban process improved collaboration through transparent task management and regular stand-ups.
+
+3. Future Plans: Additional features could be planned and implemented with ease due to the clear task workflow.
