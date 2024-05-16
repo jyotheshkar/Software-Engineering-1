@@ -1,4 +1,4 @@
-# nova.py
+# main.py
 import speech_recognition as sr
 import pyttsx3
 import datetime
@@ -14,40 +14,42 @@ import time
 # Load English tokenizer, tagger, parser, NER, and word vectors
 nlp = spacy.load("en_core_web_sm")
 
+# Base class for the voice assistant
 class VoiceAssistant:
     def __init__(self, engine):
-        self.recognizer = sr.Recognizer()
-        self.engine = engine
+        self.recognizer = sr.Recognizer()  # Initialize the speech recognizer
+        self.engine = engine  # Initialize the text-to-speech engine
 
     def listen_command(self):
         with sr.Microphone() as source:
-            self.recognizer.adjust_for_ambient_noise(source)
+            self.recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
             print("Listening...")
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source)  # Listen for audio input
 
         try:
             print("Recognizing...")
-            command = self.recognizer.recognize_google(audio).lower()
+            command = self.recognizer.recognize_google(audio).lower()  # Recognize speech using Google API
             print("You said:", command)
-            return command
+            return command  # Return the recognized command
         except sr.UnknownValueError:
             print("Sorry, I couldn't understand what you said.")
-            return ""
+            return ""  # Return empty string if the speech was not understood
         except sr.RequestError:
             print("Sorry, there was an issue with the speech recognition service.")
-            return ""
+            return ""  # Return empty string if there was an error with the request
 
     def speak(self, text):
         print(f"Speaking: {text}")
-        self.engine.say(text)
-        self.engine.runAndWait()
+        self.engine.say(text)  # Queue the text to be spoken
+        self.engine.runAndWait()  # Wait for the speech to be completed
 
-
-class Jarvis(VoiceAssistant):
+# Derived class for the specific assistant Novah
+class Novah(VoiceAssistant):
     def __init__(self, engine):
         super().__init__(engine)
-        self.is_awake = False
+        self.is_awake = False  # Initialize the awake state
 
+    # Function to get the current time of day
     def get_time_of_day(self):
         current_time = datetime.datetime.now(datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=1)))
         hour = current_time.hour
@@ -60,6 +62,7 @@ class Jarvis(VoiceAssistant):
         else:
             return "night"
 
+    # Function to get a funny response based on the time of day
     def get_funny_response(self, time_of_day):
         if time_of_day == "morning":
             return "Good morning! Let's make this day special. How can I help?"
@@ -70,6 +73,7 @@ class Jarvis(VoiceAssistant):
         else:
             return "Good night! Sweet dreams and see you tomorrow!"
 
+    # Function to authenticate the assistant based on wake words
     def authenticate(self, command):
         wake_words = ["hey are you awake", "novah are you awake", "nova are you awake"]
         greeting_words = ["hey novah", "hello novah", "hi novah", "hey nova", "hello nova", "hi nova"]
@@ -83,6 +87,7 @@ class Jarvis(VoiceAssistant):
         else:
             self.is_awake = False
 
+    # Function to open an application
     def open_application(self, app_name):
         phrases = ["Processing...", "On it...", "Just a second...", "Opening it up..."]
         self.speak(random.choice(phrases))
@@ -90,36 +95,40 @@ class Jarvis(VoiceAssistant):
             self.speak("Application name not recognized.")
             return
 
-        pyautogui.press('win')
+        pyautogui.press('win')  # Press the Windows key
         time.sleep(1)
-        pyautogui.write(app_name)
+        pyautogui.write(app_name)  # Type the application name
         time.sleep(1)
-        pyautogui.press('enter')
+        pyautogui.press('enter')  # Press Enter to open the application
         time.sleep(2)
-        hwnd = ctypes.windll.user32.GetForegroundWindow()
-        ctypes.windll.user32.ShowWindow(hwnd, 3)
+        hwnd = ctypes.windll.user32.GetForegroundWindow()  # Get the handle of the currently active window
+        ctypes.windll.user32.ShowWindow(hwnd, 3)  # Maximize the window
         self.speak(f"{app_name} opened in fullscreen mode.")
 
+    # Function to close an application
     def close_application(self, app_name):
         if not app_name:
             self.speak("Application name not recognized.")
             return
 
-        windows = pyautogui.getWindowsWithTitle(app_name)
+        windows = pyautogui.getWindowsWithTitle(app_name)  # Get the windows with the given title
         if windows:
-            windows[0].close()
+            windows[0].close()  # Close the first window found
             self.speak(f"The {app_name} application has been closed.")
         else:
             self.speak(f"No {app_name} application found.")
 
+    # Function to scroll up
     def scroll_up(self):
         pyautogui.scroll(900)
         self.speak("Scrolled up.")
 
+    # Function to scroll down
     def scroll_down(self):
         pyautogui.scroll(-900)
         self.speak("Scrolled down.")
 
+    # Function to process a command using NLP
     def process_command(self, command):
         doc = nlp(command)
         verb = None
@@ -132,6 +141,7 @@ class Jarvis(VoiceAssistant):
 
         return verb, obj
 
+    # Function to listen for commands and process them
     def listen_and_process(self):
         while True:
             command = self.listen_command()
@@ -165,6 +175,7 @@ class Jarvis(VoiceAssistant):
                     if response:
                         self.speak(response)
 
+    # Function to prompt the user and start processing commands
     def prompt_and_process(self):
         while True:
             command = self.listen_command()
@@ -176,7 +187,7 @@ class Jarvis(VoiceAssistant):
                 self.listen_and_process()
                 break
 
-
+# Entry point of the script
 if __name__ == "__main__":
     # Initialize the TTS engine
     engine = pyttsx3.init()
@@ -190,5 +201,5 @@ if __name__ == "__main__":
     if male_voice:
         engine.setProperty('voice', male_voice.id)
 
-    jarvis = Jarvis(engine)
-    jarvis.prompt_and_process()
+    novah = Novah(engine)  # Create an instance of Novah
+    novah.prompt_and_process()  # Start the assistant
