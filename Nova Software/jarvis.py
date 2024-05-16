@@ -1,4 +1,3 @@
-# novah.py
 import speech_recognition as sr
 import pyttsx3
 import datetime
@@ -31,7 +30,7 @@ class VoiceAssistant:
         self.engine.say(text)
         self.engine.runAndWait()
 
-class Jarvis(VoiceAssistant):
+class Novah(VoiceAssistant):
     def __init__(self, engine):
         super().__init__(engine)
         self.is_awake = False
@@ -94,5 +93,5 @@ if __name__ == "__main__":
     if male_voice:
         engine.setProperty('voice', male_voice.id)
 
-    jarvis = Jarvis(engine)
-    jarvis.prompt_request()
+    novah = Novah(engine)
+    novah.prompt_request()
