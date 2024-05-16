@@ -1,1 +1,0 @@
-# i am mix.py and alll the codes will be linked here 
