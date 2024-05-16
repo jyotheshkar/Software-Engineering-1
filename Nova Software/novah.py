@@ -2,39 +2,44 @@ import speech_recognition as sr
 import pyttsx3
 import datetime
 
+# Base class for the voice assistant
 class VoiceAssistant:
     def __init__(self, engine):
-        self.recognizer = sr.Recognizer()
-        self.engine = engine
+        self.recognizer = sr.Recognizer()  # Initialize the speech recognizer
+        self.engine = engine  # Initialize the text-to-speech engine
 
+    # Function to listen for voice commands
     def listen_command(self):
         with sr.Microphone() as source:
-            self.recognizer.adjust_for_ambient_noise(source)
+            self.recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
             print("Listening...")
-            audio = self.recognizer.listen(source)
+            audio = self.recognizer.listen(source)  # Listen for audio input
 
         try:
             print("Recognizing...")
-            command = self.recognizer.recognize_google(audio).lower()
+            command = self.recognizer.recognize_google(audio).lower()  # Recognize speech using Google API
             print("You said:", command)
-            return command
+            return command  # Return the recognized command
         except sr.UnknownValueError:
             print("Sorry, I couldn't understand what you said.")
-            return ""
+            return ""  # Return empty string if the speech was not understood
         except sr.RequestError:
             print("Sorry, there was an issue with the speech recognition service.")
-            return ""
+            return ""  # Return empty string if there was an error with the request
 
+    # Function to convert text to speech
     def speak(self, text):
         print(f"Speaking: {text}")
-        self.engine.say(text)
-        self.engine.runAndWait()
+        self.engine.say(text)  # Queue the text to be spoken
+        self.engine.runAndWait()  # Wait for the speech to be completed
 
+# Derived class for the specific assistant Novah
 class Novah(VoiceAssistant):
     def __init__(self, engine):
         super().__init__(engine)
-        self.is_awake = False
+        self.is_awake = False  # Initialize the awake state
 
+    # Function to get the current time of day
     def get_time_of_day(self):
         current_time = datetime.datetime.now(datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=1)))
         hour = current_time.hour
@@ -47,6 +52,7 @@ class Novah(VoiceAssistant):
         else:
             return "night"
 
+    # Function to get a funny response based on the time of day
     def get_funny_response(self, time_of_day):
         if time_of_day == "morning":
             return "Good morning! Let's make this day special. How can I help?"
@@ -57,6 +63,7 @@ class Novah(VoiceAssistant):
         else:
             return "Good night! Sweet dreams and see you tomorrow!"
 
+    # Function to authenticate the assistant based on wake words
     def authenticate(self, command):
         wake_words = ["hey are you awake", "novah are you awake", "nova are you awake"]
         greeting_words = ["hey novah", "hello novah", "hi novah", "hey nova", "hello nova", "hi nova"]
@@ -70,16 +77,18 @@ class Novah(VoiceAssistant):
         else:
             self.is_awake = False
 
+    # Function to prompt the user for a request and process it
     def prompt_request(self):
         while True:
-            command = self.listen_command()
-            self.authenticate(command)
+            command = self.listen_command()  # Listen for a command from the user
+            self.authenticate(command)  # Authenticate based on the command
             if self.is_awake:
-                time_of_day = self.get_time_of_day()
-                funny_response = self.get_funny_response(time_of_day)
-                self.speak("Hello, " + funny_response)
-                break
+                time_of_day = self.get_time_of_day()  # Get the current time of day
+                funny_response = self.get_funny_response(time_of_day)  # Get a funny response based on the time of day
+                self.speak("Hello, " + funny_response)  # Speak the funny response
+                break  # Exit the loop if the assistant is awake
 
+# Entry point of the script
 if __name__ == "__main__":
     # Initialize the TTS engine
     engine = pyttsx3.init()
@@ -93,5 +102,5 @@ if __name__ == "__main__":
     if male_voice:
         engine.setProperty('voice', male_voice.id)
 
-    novah = Novah(engine)
-    novah.prompt_request()
+    novah = Novah(engine)  # Create an instance of Novah
+    novah.prompt_request()  # Start the assistant
