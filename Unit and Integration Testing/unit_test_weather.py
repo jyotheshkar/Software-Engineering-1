@@ -13,10 +13,11 @@ class TestWeatherModule(unittest.TestCase):
         self.assertEqual(weather.expand_country_name("uk"), "United Kingdom")
         self.assertEqual(weather.expand_country_name("canada"), "canada")  # No expansion needed
 
+    @patch('weather.random.choice', return_value='Processing...')
     @patch('requests.get')
     @patch('pyttsx3.init')
     @patch('time.sleep')
-    def test_get_weather(self, mock_sleep, mock_init, mock_get):
+    def test_get_weather(self, mock_sleep, mock_init, mock_get, mock_choice):
         """
         Test the get_weather function to ensure it retrieves and displays weather information correctly.
         """
@@ -35,7 +36,10 @@ class TestWeatherModule(unittest.TestCase):
         weather.get_weather("London", "dummy_api_key")
         
         # Check if the correct URL was used to make the API call
-        mock_get.assert_called_with("http://api.openweathermap.org/data/2.5/weather?q=London&appid=dummy_api_key")
+        mock_get.assert_called_with(
+            "https://api.openweathermap.org/data/2.5/weather",
+            params={"q": "London", "appid": "dummy_api_key"}, timeout=10
+        )
         
         # Check if the TTS engine was initialized
         mock_init.assert_called_once()

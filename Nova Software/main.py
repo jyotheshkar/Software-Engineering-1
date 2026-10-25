@@ -1,5 +1,6 @@
 # main.py
 import speech_recognition as sr
+from config import get_weather_api_key
 import pyttsx3
 import datetime
 import spacy
@@ -160,7 +161,7 @@ class Novah(VoiceAssistant):
                     self.speak("Here's your joke:")
                     self.speak(joke)
                 elif any(word in command for word in ['weather', 'climate', 'temperature']):
-                    api_key = "42240d393017774c6e0f616dfd7c677b"
+                    api_key = get_weather_api_key()
                     location = weather.process_input(command)
                     if location:
                         location = weather.expand_country_name(location)

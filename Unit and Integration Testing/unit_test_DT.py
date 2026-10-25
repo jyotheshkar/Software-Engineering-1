@@ -37,6 +37,7 @@ class TestDTModule(unittest.TestCase):
         # Check if the recognized audio is returned correctly
         self.assertEqual(result, "test audio")
 
+    @patch.dict('os.environ', {'OPENWEATHERMAP_API_KEY': 'dummy_api_key'}, clear=True)
     @patch('requests.get')
     def test_get_time_for_location(self, mock_get):
         """
@@ -56,7 +57,10 @@ class TestDTModule(unittest.TestCase):
         self.assertEqual(result, "01:00 AM")
         
         # Check if the requests.get was called with the correct URL
-        mock_get.assert_called_with('http://api.openweathermap.org/data/2.5/weather?q=London&appid=42240d393017774c6e0f616dfd7c677b')
+        mock_get.assert_called_with(
+            "https://api.openweathermap.org/data/2.5/weather",
+            params={"q": "London", "appid": "dummy_api_key"}, timeout=10
+        )
 
     @patch('DT.get_time_for_location')
     @patch('spacy.load')

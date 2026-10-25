@@ -1,5 +1,6 @@
 # api.py
 import datetime
+from config import get_weather_api_key
 import speech_recognition as sr
 import pyttsx3
 import spacy
@@ -81,7 +82,7 @@ def main():
                 speak(joke, male_voice=True)
             elif any(word in user_input.lower() for word in ['weather', 'climate', 'temperature']):
                 # Check if the user asked for weather information
-                api_key = "42240d393017774c6e0f616dfd7c677b"  # Your API key for weather service
+                api_key = get_weather_api_key()
                 recognizer = sr.Recognizer()
                 try:
                     location = weather.process_input(user_input)  # Process the user's input for location
