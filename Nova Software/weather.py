@@ -1,5 +1,6 @@
 # weather.py
 import time
+from config import get_weather_api_key
 import random
 import requests
 import speech_recognition as sr
@@ -75,11 +76,16 @@ def expand_country_name(location_name):
     return country_mapping.get(location_name.lower(), location_name)
 
 def get_weather(location_name, api_key):
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    complete_url = f"{base_url}q={location_name}&appid={api_key}"
-
-    response = requests.get(complete_url)
-    data = response.json()
+    base_url = "https://api.openweathermap.org/data/2.5/weather"
+    try:
+        response = requests.get(
+            base_url, params={"q": location_name, "appid": api_key}, timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+    except (requests.RequestException, ValueError):
+        print("Unable to fetch weather; check your location, key and connection.")
+        return
 
     if data["cod"] != "404":
         # Extracting data
@@ -142,7 +148,7 @@ def process_input(input_text):
     return location
 
 if __name__ == "__main__":
-    api_key = "42240d393017774c6e0f616dfd7c677b"
+    api_key = get_weather_api_key()
     recognizer = sr.Recognizer()
 
     while True:

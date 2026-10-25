@@ -1,3 +1,7 @@
+# Local API Configuration
+
+Weather and location-time features now require a locally supplied OPENWEATHERMAP_API_KEY. Read [SECURITY.md](SECURITY.md) before running the prototype; current-source cleanup does not resolve historical credential exposure.
+
 # Novah: Voice-Based Desktop Automation
 
 Novah is a desktop application that empowers individuals with disabilities by providing seamless computer access through voice commands and natural language processing. With Novah, users can effortlessly open applications, write emails, access the weather and time, and much more—all hands-free.

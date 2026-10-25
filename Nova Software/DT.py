@@ -1,5 +1,6 @@
 # DT.py
 import speech_recognition as sr
+from config import get_weather_api_key
 import pyttsx3
 import spacy
 import requests
@@ -26,11 +27,13 @@ def get_audio():
 
 # Function to get the current time for a given location using OpenWeatherMap API
 def get_time_for_location(location):
-    api_key = '42240d393017774c6e0f616dfd7c677b'  # Your API key for OpenWeatherMap
-    base_url = f'http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}'
+    api_key = get_weather_api_key()
+    base_url = 'https://api.openweathermap.org/data/2.5/weather'
     
     try:
-        response = requests.get(base_url)  # Make a request to the API
+        response = requests.get(
+            base_url, params={"q": location, "appid": api_key}, timeout=10
+        )  # Send credentials over HTTPS; do not print request objects
         data = response.json()  # Parse the response JSON
         
         if response.status_code == 200:
@@ -40,8 +43,8 @@ def get_time_for_location(location):
         else:
             print("Failed to fetch time for", location)
             return None
-    except Exception as ex:
-        print("Exception:", str(ex))
+    except Exception:
+        print("Unable to fetch time for this location; check your key and connection.")
         return None
 
 # Function to process the user's query and determine the appropriate response

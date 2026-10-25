@@ -98,7 +98,7 @@ class IntegratedTestApiScript(unittest.TestCase):
         self.assertEqual(expanded_location, "London, United Kingdom")
 
         # Call the get_weather function
-        api_key = "42240d393017774c6e0f616dfd7c677b"
+        api_key = "dummy_api_key"
         api.weather.get_weather(expanded_location, api_key)
         mock_get_weather.assert_called_with(expanded_location, api_key)
 
